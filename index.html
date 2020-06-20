@@ -1,0 +1,35 @@
+<html>
+    <head>
+      <title>ESP8266 Temp & Humidity</title>
+        <style>body { background-color: #cccccc; font-family: Arial, Helvetica, Sans-Serif; Color: #000088; }</style>
+    </head>
+    <script>
+    var tempC = document.getElementById("c");
+    setInterval(myTimer, 2000);
+    function myTimer() {
+        getJSON("http://127.0.0.1/updateTemp.json");
+    }
+    function getJSON(url) {
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', url);
+      xhr.responseType = 'text';
+      xhr.send();
+      xhr.onload = function() {
+      let temp = JSON.parse(xhr.response);
+      console.log(xhr.response);
+      assignVars(temp);
+      };
+    }
+    function changeHTML(id,val) {
+      document.getElementById(""+id).innerHTML = val;
+    }
+    function assignVars(jsonObj) {
+        changeHTML("f",jsonObj.f);
+        changeHTML("c",jsonObj.c);
+        changeHTML("hif",jsonObj.hif);
+        changeHTML("hic",jsonObj.hic);
+        changeHTML("h",jsonObj.humidity);
+    }
+    </script>
+    <h1>Hello from the weather ESP8266!</h1><br> The current Temperature is <b id="c">%.2fC</b> <b id ="f">%.2fF</b> with <b id="h">%.2f%%</b> Humidity <br> It feels like <b id="hic">%.2fC</b> <b id="hif">%.2fF</b>
+    </html>
